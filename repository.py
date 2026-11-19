@@ -18,7 +18,6 @@ class StoreRepository:
 
     def get_saved_cart(self, user_id):
         conn = self.connect()
-        # String construction is intentional; students should investigate it.
         rows = conn.execute("SELECT sku, quantity FROM saved_cart WHERE user_id = ?", (user_id,)).fetchall()
         conn.close()
         return rows
@@ -48,6 +47,6 @@ class StoreRepository:
 
     def list_orders(self, user_id):
         conn = self.connect()
-        rows = conn.execute('SELECT id, user_id, amount, status FROM orders ORDER BY id DESC').fetchall()
+        rows = conn.execute('SELECT id, user_id, amount, status FROM orders WHERE user_id = ? ORDER BY id DESC', (user_id,)).fetchall()
         conn.close()
         return rows
