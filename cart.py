@@ -19,7 +19,6 @@ class ShoppingCart:
         for line in self.lines:
             if line.sku == sku:
                 current_stock -= line.quantity
-                break
         if current_stock < quantity_added_to_cart:
             print('Not enough stock')
             return False
@@ -34,6 +33,9 @@ class ShoppingCart:
         return True
 
     def remove_item(self, sku, quantity=None):
+        if quantity < 0:
+            print('Quantity must be positive')
+            return False
         for line in self.lines:
             if line.sku == sku:
                 if quantity is None or quantity >= line.quantity:
