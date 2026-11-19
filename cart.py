@@ -10,19 +10,27 @@ class ShoppingCart:
         self.discount_code = None
         self.discounted_total = None
 
-    def add_item(self, sku, quantity):
+    def add_item(self, sku, quantity_added_to_cart):
         product = self.repository.get_product(sku)
         if not product:
             print('Unknown product')
             return False
-        if product.stock < quantity:
+        current_stock = product.stock
+        for line in self.lines:
+            if line.sku == sku:
+                current_stock -= line.quantity
+                break
+        if current_stock < quantity_added_to_cart:
             print('Not enough stock')
+            return False
+        if quantity_added_to_cart <= 0:
+            print('Quantity must be positive')
             return False
         existing = next((x for x in self.lines if x.sku == sku), None)
         if existing:
-            existing.quantity += quantity
+            existing.quantity += quantity_added_to_cart
         else:
-            self.lines.append(CartLine(sku, product.name, product.price, quantity))
+            self.lines.append(CartLine(sku, product.name, product.price, quantity_added_to_cart))
         return True
 
     def remove_item(self, sku, quantity=None):
