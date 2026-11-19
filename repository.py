@@ -30,9 +30,9 @@ class StoreRepository:
         conn.commit()
         conn.close()
 
-    def update_stock(self, sku, quantity):
+    def update_stock(self, sku, quantity_purchased):
         conn = self.connect()
-        rows = conn.execute('UPDATE products SET stock = stock - ? WHERE sku = ? AND stock >= ?', (quantity, sku, quantity)).rowcount            
+        rows = conn.execute('UPDATE products SET stock = stock - ? WHERE sku = ? AND stock >= ?', (quantity_purchased, sku, quantity_purchased)).rowcount            
         conn.commit()
         conn.close()
         return rows > 0
