@@ -51,7 +51,7 @@ class ShoppingCart:
 
     def total(self):
         if self.discount_amount is not None:
-            return self.subtotal() - self.discount_amount
+            return max(0, self.subtotal() - self.discount_amount)
         return self.subtotal()
 
     def apply_discount(self, code):
