@@ -32,9 +32,10 @@ class StoreRepository:
 
     def update_stock(self, sku, quantity):
         conn = self.connect()
-        conn.execute('UPDATE products SET stock = stock - ? WHERE sku = ?', (quantity, sku))
+        rows = conn.execute('UPDATE products SET stock = stock - ? WHERE sku = ? AND stock >= ?', (quantity, sku, quantity)).rowcount            
         conn.commit()
         conn.close()
+        return rows > 0
 
     def save_order(self, user_id, amount, status, request_id):
         conn = self.connect()
