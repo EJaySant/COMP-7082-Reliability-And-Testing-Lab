@@ -11,7 +11,6 @@ class CheckoutService:
         if len(cart.lines) == 0:
             return OrderResult(None, 'empty', 0)
         amount = cart.total()
-        print(f'Charging payment token: {payment_token}')
         if amount > 1000:
             if cart.user_id:
                 if not request_id:

@@ -6,7 +6,7 @@
 | 4 | cart.py > add_item() | The current stock and quantity comparison check does not account for the quantities currently in the cart (cart.lines), which may allow a user to unintentionally add items to cart even when the current stock is less than the combined quantity in the cart. | Added additional logic to combine all the current quantities in the cart in order to update the current stock when checking if additional items can be added. Also, added negative input check to quantity parameter. |
 | 5 | cart.py > remove_item() | The function does not handle negative quantities, which can allow remove_item to be used to increment line item quantities when given a negative number.  | Added negative quantity check beforehand to prevent unintended functionality. |
 | 6 | cart.py > apply_discount(), total() & discount variables | The apply_discount would compound the discount if multiple discounts were applied and only 1 discount code was tracked by the cart. | Changed discounted_total to discounted_amount and adjusted logic to ensure that the discount is always calculated from subtotal() and not total() to prevent compounding discounts. Changed discount_code to discount_codes and checked to ensure given discount code hasn't been added before. |
-| 7 | | | |
+| 7 | checkout.py > checkout() | The function logs the payment token that it charges to which could expose credentials in logs. | Removed the logging of the payment token. |
 | 8 | | | |
 | 9 | | | |
 | 10 | | | |
