@@ -23,12 +23,10 @@ class StoreRepository:
         return rows
 
     def save_cart(self, user_id, lines):
-        conn = self.connect()
-        conn.execute('DELETE FROM saved_cart WHERE user_id = ?', (user_id,))
-        for line in lines:
-            conn.execute('INSERT INTO saved_cart VALUES (?, ?, ?)', (user_id, line.sku, line.quantity))
-        conn.commit()
-        conn.close()
+        with self.connect() as conn:
+            conn.execute('DELETE FROM saved_cart WHERE user_id = ?', (user_id,))
+            for line in lines:
+                conn.execute('INSERT INTO saved_cart VALUES (?, ?, ?)', (user_id, line.sku, line.quantity))
 
     def update_stock(self, sku, quantity_purchased):
         conn = self.connect()
