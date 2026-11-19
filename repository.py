@@ -31,6 +31,10 @@ class StoreRepository:
             rows = conn.execute('UPDATE products SET stock = stock - ? WHERE sku = ? AND stock >= ?', (quantity_purchased, sku, quantity_purchased)).rowcount            
         return rows > 0
 
+    def rollback_stock_update(self, sku, quantity):
+        with self.connect() as conn:
+            conn.execute('UPDATE products SET stock = stock + ? WHERE sku = ?', (quantity, sku))
+
     def save_order(self, user_id, amount, status, request_id):
         with self.connect() as conn:
             cur = conn.execute('INSERT INTO orders(user_id, amount, status, request_id) VALUES (?, ?, ?, ?)',

@@ -26,10 +26,22 @@ class CheckoutService:
 
         if status == 'paid':
             for line in cart.lines:
-                self.repository.update_stock(line.sku, line.quantity)
+                if not self.repository.update_stock(line.sku, line.quantity):
+                    print('Failed to update stock')
+                    status = 'stock_error'
+                    for updated_line in cart.lines:
+                        if updated_line.sku == line.sku:
+                            break
+                        self.repository.rollback_stock_update(updated_line.sku, updated_line.quantity)
+                    break
+            if status == 'stock_error':
+                print('Failed to complete order')
+                self.payment_gateway.refund(amount, payment_token)
+                return OrderResult(None, status, amount)
             order_id = self.repository.save_order(cart.user_id, amount, status, request_id)
             cart.lines.clear()
             cart.discounted_total = None
             cart.save()
             return OrderResult(order_id, status, amount)
+        
         return OrderResult(None, status, amount)

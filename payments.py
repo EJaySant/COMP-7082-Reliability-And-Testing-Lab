@@ -12,3 +12,8 @@ class FakePaymentGateway:
         time.sleep(self.delay)
         self.calls.append((amount, payment_token))
         return {'approved': self.should_approve, 'transaction_id': 'TEST-001' if self.should_approve else None}
+
+    def refund(self, amount, payment_token):
+        time.sleep(self.delay)
+        self.calls.append(('refund', amount, payment_token))
+        return {'refunded': True, 'transaction_id': 'TEST-REFUND-001'}

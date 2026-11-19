@@ -8,5 +8,4 @@
 | 6 | cart.py > apply_discount(), total() & discount variables | The apply_discount would compound the discount if multiple discounts were applied and only 1 discount code was tracked by the cart. | Changed discounted_total to discounted_amount and adjusted logic to ensure that the discount is always calculated from subtotal() and not total() to prevent compounding discounts. Changed discount_code to discount_codes and checked to ensure given discount code hasn't been added before. |
 | 7 | checkout.py > checkout() | The function logs the payment token that it charges to which could expose credentials in logs. | Removed the logging of the payment token. |
 | 8 | checkout.py > checkout() | Stock is updated and order is saved without checking if the payment was approved. | Added payment result check before stock is updated and order is saved.  |
-| 9 | | | |
-| 10 | | | |
+| 9 | checkout.py > checkout(), payments.py > refund() & repository.py > rollback_stock_update() | The checkout would not refund payment nor rollback stock updates if 1 of the stock updates fail. | Added additional functions to rollback stock updates and refund payments if a given stock update fails to ensure a transaction is atomic. |
